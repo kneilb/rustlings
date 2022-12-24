@@ -1,7 +1,7 @@
 // iterators4.rs
 // Execute `rustlings hint iterators4` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
+use std::convert::TryInto;
 
 pub fn factorial(num: u64) -> u64 {
     // Complete this function to return the factorial of num
@@ -13,6 +13,15 @@ pub fn factorial(num: u64) -> u64 {
     // For an extra challenge, don't use:
     // - recursion
     // Execute `rustlings hint iterators4` for hints.
+
+    // [1, 2, 3, 4].iter().fold(1, |acc, x| acc * x)
+
+    // let numbers = 1..;
+    // numbers.take(num.try_into().unwrap()).fold(1, |acc, x| acc * x)
+
+    // (1..=num).product()
+
+    (1..=num).fold(1, |acc, x| acc * x)
 }
 
 #[cfg(test)]

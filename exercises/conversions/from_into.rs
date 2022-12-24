@@ -35,10 +35,30 @@ impl Default for Person {
 // If while parsing the age, something goes wrong, then return the default of Person
 // Otherwise, then return an instantiated Person object with the results
 
-// I AM NOT DONE
-
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+        if s.len() != 0 {
+            let mut tokens = s.split(",");
+            if let Some(name) = tokens.next() {
+                // TODO: there must be a better way to avoid this?
+                if name.len() == 0 {
+                    return Default::default();
+                }
+                if let Ok(age) = tokens.next().unwrap_or("").parse() {
+                    if let Some(unwanted) = tokens.next() {
+                        // TODO: again, this seems rough. let-else might have been better here!!
+                        return Default::default();
+                    }
+                    return Person {
+                        name: name.to_owned(),
+                        age: age,
+                    };
+                }
+            }
+        }
+
+        // TODO: There must be a better way to fall back to this...!
+        Default::default()
     }
 }
 
