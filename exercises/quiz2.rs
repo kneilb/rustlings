@@ -18,8 +18,6 @@
 // - The output element is going to be a Vector of strings.
 // No hints this time!
 
-// I AM NOT DONE
-
 pub enum Command {
     Uppercase,
     Trim,
@@ -32,17 +30,16 @@ mod my_module {
     pub fn transformer(input: Vec<(String, Command)>) -> Vec<String> {
         let mut output: Vec<String> = vec![];
         for (string, command) in input.iter() {
-            match command {
-                Command::Uppercase => {
-                    output.push(string.to_uppercase());
-                }
-                Command::Trim => {
-                    output.push(string.trim().to_string());
-                }
-                Command::Append(num) => {
-                    output.push(format!("{}{}", string, "bar".repeat(*num)));
-                }
-            }
+            let result = match command {
+                Command::Uppercase => string.to_uppercase(),
+                Command::Trim => string.trim().to_owned(),
+                Command::Append(num) => string.to_owned() + &"bar".repeat(*num),
+
+                // TODO: seem to be able to have multiple entries in match for the same thing...!
+                // Command::Append(n) => output.push(string.to_owned() + &"bar".repeat(*n)),
+            };
+
+            output.push(result);
         }
         output
     }
