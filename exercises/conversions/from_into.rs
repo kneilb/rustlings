@@ -35,10 +35,26 @@ impl Default for Person {
 // If while parsing the age, something goes wrong, then return the default of Person
 // Otherwise, then return an instantiated Person object with the results
 
-// I AM NOT DONE
-
 impl From<&str> for Person {
+    // Improved from last time using match & let-else
     fn from(s: &str) -> Person {
+        let mut tokens = s.split(",");
+
+        let name = match tokens.next() {
+            None | Some("") => return Person::default(),
+            Some(x) => x.to_owned(),
+        };
+
+        // Not sure about this - but I prefer it to a 2-level match
+        let Ok(age) = tokens.next().unwrap_or("").parse() else {
+            return Person::default();
+        };
+
+        if tokens.next().is_some() {
+            return Person::default();
+        }
+
+        Person { name, age }
     }
 }
 

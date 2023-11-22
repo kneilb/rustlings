@@ -6,8 +6,6 @@
 //    list_of_results functions.
 // Execute `rustlings hint iterators3` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
-
 #[derive(Debug, PartialEq, Eq)]
 pub enum DivisionError {
     NotDivisible(NotDivisibleError),
@@ -23,21 +21,41 @@ pub struct NotDivisibleError {
 // Calculate `a` divided by `b` if `a` is evenly divisible by `b`.
 // Otherwise, return a suitable error.
 pub fn divide(a: i32, b: i32) -> Result<i32, DivisionError> {
-    todo!();
+    if b == 0 {
+        Err(DivisionError::DivideByZero)
+    } else if a % b != 0 {
+        Err(DivisionError::NotDivisible(NotDivisibleError {
+            dividend: a,
+            divisor: b,
+        }))
+    } else {
+        Ok(a / b)
+    }
 }
 
 // Complete the function and return a value of the correct type so the test passes.
 // Desired output: Ok([1, 11, 1426, 3])
-fn result_with_list() -> () {
-    let numbers = vec![27, 297, 38502, 81];
+fn result_with_list() -> Result<Vec<i32>, DivisionError> {
+    let numbers = vec![27, 297, 38502, 81, 80];
     let division_results = numbers.into_iter().map(|n| divide(n, 27));
+
+    // If we add "80" to the list above, it generates a DivisionError.
+    // Need to filter with is_ok() to strip it out
+    division_results.filter(|x| x.is_ok()).collect()
+
+    // Without the 80 in the list, this simpler implementation is fine (but gammy overall)
+    // division_results.collect()
 }
 
 // Complete the function and return a value of the correct type so the test passes.
 // Desired output: [Ok(1), Ok(11), Ok(1426), Ok(3)]
-fn list_of_results() -> () {
-    let numbers = vec![27, 297, 38502, 81];
+fn list_of_results() -> Vec<Result<i32, DivisionError>> {
+    let numbers = vec![27, 297, 38502, 81, 80];
     let division_results = numbers.into_iter().map(|n| divide(n, 27));
+    
+    // See discussion above.
+    division_results.filter(|x| x.is_ok()).collect()
+    // division_results.collect()
 }
 
 #[cfg(test)]
